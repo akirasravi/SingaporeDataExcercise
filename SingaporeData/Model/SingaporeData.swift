@@ -8,14 +8,18 @@
 
 import Foundation
 
-struct SingaporeData: Codable {
-    
-    var volumeOfMobileData: String
-    var quarter: String
-    
-    enum CodingKeys: String, CodingKey {
-        case volumeOfMobileData = "volume_of_mobile_data"
-        case quarter
+struct SingaporeDataResponse: Codable {
+    let volumeOfMobileData: String
+    let quarter : String
+
+    init(volumeOfMobileData: String, quarter: String) {
+        self.volumeOfMobileData = volumeOfMobileData
+        self.quarter = quarter
     }
+}
+
+struct SingaporeData: Codable {
+    let year : String
+    let quarterData: [String]
 }
 

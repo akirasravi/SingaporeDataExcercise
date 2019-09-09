@@ -13,11 +13,13 @@
 		0ABCED542326119800F8E03F /* SingaporeData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCED522326119800F8E03F /* SingaporeData.xcdatamodeld */; };
 		0ABCED562326119A00F8E03F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ABCED552326119A00F8E03F /* Assets.xcassets */; };
 		0ABCED592326119A00F8E03F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0ABCED572326119A00F8E03F /* LaunchScreen.storyboard */; };
-		0ABCED642326119A00F8E03F /* SingaporeDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCED632326119A00F8E03F /* SingaporeDataTests.swift */; };
+		0ABCED642326119A00F8E03F /* SingaporeDataViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCED632326119A00F8E03F /* SingaporeDataViewModelTests.swift */; };
 		0ABCED6F2326119A00F8E03F /* SingaporeDataUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCED6E2326119A00F8E03F /* SingaporeDataUITests.swift */; };
 		0ABCED8123261A1C00F8E03F /* SingaporeDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCED8023261A1C00F8E03F /* SingaporeDataViewModel.swift */; };
 		0ABCED8323261A2800F8E03F /* SingaporeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCED8223261A2800F8E03F /* SingaporeData.swift */; };
 		0ABCED8523261A3500F8E03F /* ServiceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCED8423261A3500F8E03F /* ServiceUtil.swift */; };
+		8E4A0533232620300075A8DF /* SingaporeDataTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4A0532232620300075A8DF /* SingaporeDataTableViewCell.swift */; };
+		8E4A0535232671370075A8DF /* SingaporeDataViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4A0534232671370075A8DF /* SingaporeDataViewControllerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,7 +49,7 @@
 		0ABCED582326119A00F8E03F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0ABCED5A2326119A00F8E03F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0ABCED5F2326119A00F8E03F /* SingaporeDataTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SingaporeDataTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0ABCED632326119A00F8E03F /* SingaporeDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingaporeDataTests.swift; sourceTree = "<group>"; };
+		0ABCED632326119A00F8E03F /* SingaporeDataViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingaporeDataViewModelTests.swift; sourceTree = "<group>"; };
 		0ABCED652326119A00F8E03F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0ABCED6A2326119A00F8E03F /* SingaporeDataUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SingaporeDataUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0ABCED6E2326119A00F8E03F /* SingaporeDataUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingaporeDataUITests.swift; sourceTree = "<group>"; };
@@ -55,6 +57,8 @@
 		0ABCED8023261A1C00F8E03F /* SingaporeDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingaporeDataViewModel.swift; sourceTree = "<group>"; };
 		0ABCED8223261A2800F8E03F /* SingaporeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingaporeData.swift; sourceTree = "<group>"; };
 		0ABCED8423261A3500F8E03F /* ServiceUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceUtil.swift; sourceTree = "<group>"; };
+		8E4A0532232620300075A8DF /* SingaporeDataTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingaporeDataTableViewCell.swift; sourceTree = "<group>"; };
+		8E4A0534232671370075A8DF /* SingaporeDataViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingaporeDataViewControllerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,7 +126,8 @@
 		0ABCED622326119A00F8E03F /* SingaporeDataTests */ = {
 			isa = PBXGroup;
 			children = (
-				0ABCED632326119A00F8E03F /* SingaporeDataTests.swift */,
+				0ABCED632326119A00F8E03F /* SingaporeDataViewModelTests.swift */,
+				8E4A0534232671370075A8DF /* SingaporeDataViewControllerTests.swift */,
 				0ABCED652326119A00F8E03F /* Info.plist */,
 			);
 			path = SingaporeDataTests;
@@ -149,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				0ABCED4D2326119800F8E03F /* SingaporeDataViewController.swift */,
+				8E4A0532232620300075A8DF /* SingaporeDataTableViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -300,6 +306,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E4A0533232620300075A8DF /* SingaporeDataTableViewCell.swift in Sources */,
 				0ABCED542326119800F8E03F /* SingaporeData.xcdatamodeld in Sources */,
 				0ABCED8323261A2800F8E03F /* SingaporeData.swift in Sources */,
 				0ABCED8123261A1C00F8E03F /* SingaporeDataViewModel.swift in Sources */,
@@ -313,7 +320,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0ABCED642326119A00F8E03F /* SingaporeDataTests.swift in Sources */,
+				0ABCED642326119A00F8E03F /* SingaporeDataViewModelTests.swift in Sources */,
+				8E4A0535232671370075A8DF /* SingaporeDataViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
