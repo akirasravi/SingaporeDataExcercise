@@ -27,6 +27,17 @@ class SingaporeDataUITests: XCTestCase {
     }
 
     func testExample() {
+        
+        let app = XCUIApplication()
+        let tablesQuery = app.tables
+        
+        let yearHeader = tablesQuery.staticTexts["Year"]
+        XCTAssertTrue(yearHeader.exists)
+        
+        let consumptionHeader = tablesQuery.staticTexts["Consumption"]
+        XCTAssertTrue(consumptionHeader.exists)
+       
+        
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
