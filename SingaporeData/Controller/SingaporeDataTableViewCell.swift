@@ -10,7 +10,6 @@ import UIKit
 
 class SingaporeDataTableViewCell: UITableViewCell {
     @IBOutlet weak var year: UILabel!
-    
     @IBOutlet weak var consumption: UILabel!
     @IBOutlet weak var clickableImage: UIImageView!
     

@@ -51,7 +51,7 @@ class SingaporeDataViewModelTests: XCTestCase {
     
     func testSaveSingaporeDatatoCache() {
         viewModel?.deleteDataFromCache()
-        let mockData = [SingaporeDataResponse(volumeOfMobileData: "0.899", quarter: "2019-Q1"), SingaporeDataResponse(volumeOfMobileData: "0.1", quarter: "2019-Q2"), SingaporeDataResponse(volumeOfMobileData: "0.7", quarter: "2018-Q1")]
+        let mockData = [SingaporeDataResponse(volumeOfMobileData: "0.899", quarter: "2011-Q1"), SingaporeDataResponse(volumeOfMobileData: "0.1", quarter: "2011-Q2"), SingaporeDataResponse(volumeOfMobileData: "0.7", quarter: "2018-Q1")]
         
         viewModel?.saveSingaporeDatatoCache(data: mockData)
         if let retrievedData = viewModel?.retrieveDataFromCache() {
@@ -64,7 +64,7 @@ class SingaporeDataViewModelTests: XCTestCase {
 
 class ServiceUtilMock: ServiceUtilProtocol {
     func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?, String?) -> Void) {
-        let mockData = [SingaporeDataResponse(volumeOfMobileData: "0.899", quarter: "2019-Q1"), SingaporeDataResponse(volumeOfMobileData: "0.1", quarter: "2019-Q2"), SingaporeDataResponse(volumeOfMobileData: "0.7", quarter: "2018-Q1")]
+        let mockData = [SingaporeDataResponse(volumeOfMobileData: "0.899", quarter: "2011-Q1"), SingaporeDataResponse(volumeOfMobileData: "0.1", quarter: "2011-Q2"), SingaporeDataResponse(volumeOfMobileData: "0.7", quarter: "2018-Q1")]
         
         completion(mockData, nil)
     }

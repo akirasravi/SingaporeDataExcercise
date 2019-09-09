@@ -28,7 +28,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
     func getSingaporeDataFromnService() {
         DispatchQueue.main.async {
             let dataFromCache = self.retrieveDataFromCache()
-            self.reloadTableWithNewcontent(singaporeData: dataFromCache)
+            self.reloadTableWithNewContent(singaporeData: dataFromCache)
         }
         
         self.service.getSingaporeDataFromAPI() { (data, error) in
@@ -38,7 +38,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
                     self.saveSingaporeDatatoCache(data: singaporeData)
                 }
                 
-                self.reloadTableWithNewcontent(singaporeData: singaporeData)
+                self.reloadTableWithNewContent(singaporeData: singaporeData)
             }else{
                 if let error = error {
                     self.delegate?.showAlert(title: "error", message: error)
@@ -49,7 +49,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         }
     }
     
-    func reloadTableWithNewcontent (singaporeData: [SingaporeDataResponse]) {
+    func reloadTableWithNewContent (singaporeData: [SingaporeDataResponse]) {
         var dictionary:[String: [String]] = [:]
         
         DispatchQueue.main.async {
@@ -59,12 +59,17 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         for data in singaporeData {
             let quarters = data.quarter.split(separator: "-")
             let year = String(quarters[0])
-            if var value = dictionary[year], value.count > 0 {
-                value.append(data.volumeOfMobileData)
-                dictionary.updateValue(value, forKey: year)
-            }else{
-                dictionary[year] = [data.volumeOfMobileData]
+            
+            if year >= "2008" && year < "2019"
+            {
+                if var value = dictionary[year], value.count > 0 {
+                    value.append(data.volumeOfMobileData)
+                    dictionary.updateValue(value, forKey: year)
+                }else{
+                    dictionary[year] = [data.volumeOfMobileData]
+                }
             }
+            
         }
         
         let sortedDictionary = dictionary.sorted { $0.key < $1.key }
