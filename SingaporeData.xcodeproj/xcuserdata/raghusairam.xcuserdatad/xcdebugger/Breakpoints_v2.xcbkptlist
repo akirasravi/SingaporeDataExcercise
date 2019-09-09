@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SingaporeData/AppDelegate.swift"
-            timestampString = "589727776.308319"
+            timestampString = "589733725.032372"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "20"
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SingaporeData/Common/ServiceUtil.swift"
-            timestampString = "589727776.308418"
+            timestampString = "589733725.0324579"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "getSingaporeDataFromAPI(url:completion:)"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "getSingaporeDataFromAPI(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

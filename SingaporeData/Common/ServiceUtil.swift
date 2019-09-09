@@ -9,7 +9,7 @@
 import Foundation
 
 protocol ServiceUtilProtocol {
-     func getSingaporeDataFromAPI(url: String, completion: @escaping ([SingaporeDataResponse]?) -> Void)
+     func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?) -> Void)
 }
 
 class ServiceUtil: ServiceUtilProtocol {
@@ -18,7 +18,7 @@ class ServiceUtil: ServiceUtilProtocol {
         
     }
     
-    func getSingaporeDataFromAPI(url: String, completion: @escaping ([SingaporeDataResponse]?) -> Void){
+    func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?) -> Void){
         let endpointUrl: String = "https://data.gov.sg/api/action/datastore_search?resource_id=a807b7ab-6cad-4aa6-87d0-e283a7353a0f"
         guard let url = URL(string: endpointUrl) else {
             print("Error: cannot create URL")
@@ -31,13 +31,6 @@ class ServiceUtil: ServiceUtilProtocol {
         
         let task = session.dataTask(with: urlRequest) {
             (data, response, error) in
-            print(response)
-//            print(error)
-//            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-//                print(json)
-//                completion(nil)
-//            }
-//            String.init(data: data, encoding: String.Encoding.utf8)
             guard error == nil else {
                 completion(nil)
                 return
@@ -47,8 +40,8 @@ class ServiceUtil: ServiceUtilProtocol {
                 return
             }
             do {
-                if let todo = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] {
-                    if let result = todo["result"] as? [String:Any] {
+                if let jsonData = try JSONSerialization.jsonObject(with: responseData, options: []) as? [String: Any] {
+                    if let result = jsonData["result"] as? [String:Any] {
                         if let records = result["records"] as? [[String:Any]] {
                             print(records)
                             do {

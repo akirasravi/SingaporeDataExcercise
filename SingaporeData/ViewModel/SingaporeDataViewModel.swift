@@ -8,13 +8,14 @@
 
 import Foundation
 
-protocol SingaporeDataViewModelProtocol{
+protocol SingaporeDataViewModelProtocol {
     var singaporeDataTableData: [SingaporeData] {get set}
     var delegate: SingaporeDataViewControllerDelegate? {get set}
     var processedSingaporeData: [(key: String, value: [String])] {get set}
     var service: ServiceUtilProtocol {get set}
     func getTotalConsumption(array:  [String]) -> String 
     func getSingaporeDataFromnService()
+    func checkIfYearDemonstratesDecreaseInVolumeData(yearData: [String]) -> Bool
 }
 
 class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
@@ -24,9 +25,9 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
     var singaporeDataTableData: [SingaporeData] = []
     var processedSingaporeData: [(key: String, value: [String])] = []
     
-    func getSingaporeDataFromnService(){
+    func getSingaporeDataFromnService() {
         
-        self.service.getSingaporeDataFromAPI(url: "") { (data) in
+        self.service.getSingaporeDataFromAPI() { (data) in
             if let singaporeData = data {
                 var dictionary:[String: [String]] = [:]
                 
@@ -42,7 +43,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
                 }
                 
                 let sortedDictionary = dictionary.sorted{$0.key < $1.key }
-
+                
                 self.processedSingaporeData = sortedDictionary
                 
                 print(sortedDictionary)
@@ -64,6 +65,19 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         }
         
         return String(describing: total)
+    }
+    
+    func checkIfYearDemonstratesDecreaseInVolumeData(yearData: [String]) -> Bool {
+        var i: Int = 1
+        
+        while i < yearData.count {
+            if yearData[i] < yearData[i-1] {
+                return true
+            }
+            i += 1
+        }
+        
+        return false
     }
     
 }

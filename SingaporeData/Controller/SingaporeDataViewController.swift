@@ -60,7 +60,7 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if let singaporeDataCell = tableView.dequeueReusableCell(withIdentifier: reuseTableIdentifier) as? SingaporeDataTableViewCell {
-            singaporeDataCell.configure(yearString: "Year", consumptionText: "Consumption")
+            singaporeDataCell.configure(yearString: "Year", consumptionText: "Consumption", isClickble: false)
             singaporeDataCell.selectionStyle = .none
             return singaporeDataCell
         }else{
@@ -68,10 +68,44 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
         }
 
     }
+    
+    @objc func imgTap(tapGesture: UITapGestureRecognizer) {
+        let imgView = tapGesture.view as! UIImageView
+        let dataRow = viewModel.processedSingaporeData[imgView.tag]
+        var i = 1
+        var message = ""
+        let string = "Q%d : %@\n"
+        for value in dataRow.value {
+            message += String(format: string, i, value)
+            i+=1
+        }
+       
+        let alert = UIAlertController(title: String(format: "Year %@", dataRow.key), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+            switch action.style{
+            case .default:
+                print("default")
+            case .cancel:
+                print("cancel")
+            case .destructive:
+                print("destructive")
+                
+            }}))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let singaporeDataCell = tableView.dequeueReusableCell(withIdentifier: reuseTableIdentifier, for: indexPath) as? SingaporeDataTableViewCell {
             let dataRow = viewModel.processedSingaporeData[indexPath.row]
-            singaporeDataCell.configure(yearString: dataRow.key, consumptionText: viewModel.getTotalConsumption(array: dataRow.value))
+            
+            let tapGesture = UITapGestureRecognizer (target: self, action: #selector(imgTap))
+            singaporeDataCell.clickableImage.addGestureRecognizer(tapGesture)
+            singaporeDataCell.clickableImage.isUserInteractionEnabled = true
+            singaporeDataCell.clickableImage.tag = indexPath.row
+            
+            let isDecreaseInVolumeData = viewModel.checkIfYearDemonstratesDecreaseInVolumeData(yearData: dataRow.value)
+            
+            singaporeDataCell.configure(yearString: dataRow.key, consumptionText: viewModel.getTotalConsumption(array: dataRow.value), isClickble: isDecreaseInVolumeData)
             singaporeDataCell.selectionStyle = .none
             return singaporeDataCell
         }else{

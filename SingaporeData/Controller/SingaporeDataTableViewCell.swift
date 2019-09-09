@@ -12,20 +12,19 @@ class SingaporeDataTableViewCell: UITableViewCell {
     @IBOutlet weak var year: UILabel!
     
     @IBOutlet weak var consumption: UILabel!
+    @IBOutlet weak var clickableImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-    }
-   
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
+        clickableImage.image = UIImage(named: "decrease")
+        clickableImage.isUserInteractionEnabled = true
+        clickableImage.contentMode = .scaleToFill
     }
 
-    func configure(yearString: String, consumptionText: String){
+    func configure(yearString: String, consumptionText: String, isClickble: Bool){
         self.year?.text = yearString
         self.consumption?.text = consumptionText
+        clickableImage.isHidden = !isClickble
     }
 }

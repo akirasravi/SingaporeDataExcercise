@@ -22,7 +22,9 @@ class SingaporeDataViewModelTests: XCTestCase {
     }
 
     func testGetTotalConsumption() {
-        XCTAssertEqual("0.9", viewModel?.getTotalConsumption(array: ["0.3", "0.6"]))
+        //given
+        let array = ["0.3", "0.6"]
+        XCTAssertEqual("0.9", viewModel?.getTotalConsumption(array: array))
     }
     
     
@@ -30,11 +32,21 @@ class SingaporeDataViewModelTests: XCTestCase {
         viewModel?.getSingaporeDataFromnService()
         XCTAssertEqual(2, viewModel?.processedSingaporeData.count)
     }
+    
+    func testfYearDemonstratesDecreaseInVolumeData(){
+        //given
+        let array1 = ["0.3", "0.6", "0.5", "0.9"]
+        XCTAssertTrue(viewModel?.checkIfYearDemonstratesDecreaseInVolumeData(yearData: array1) ?? true)
+        
+        //given
+        let array2 = ["0.3", "0.6", "0.7", "0.9"]
+        XCTAssertFalse(viewModel?.checkIfYearDemonstratesDecreaseInVolumeData(yearData: array2) ?? false)
+    }
 
 }
 
 class ServiceUtilMock: ServiceUtilProtocol{
-    func getSingaporeDataFromAPI(url: String, completion: @escaping ([SingaporeDataResponse]?) -> Void) {
+    func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?) -> Void) {
         
         let mockData = [SingaporeDataResponse(volumeOfMobileData: "0.899", quarter: "2019-Q1"), SingaporeDataResponse(volumeOfMobileData: "0.1", quarter: "2019-Q2"), SingaporeDataResponse(volumeOfMobileData: "0.7", quarter: "2018-Q1")]
         completion(mockData)
