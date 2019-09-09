@@ -10,6 +10,7 @@ import UIKit
 
 protocol SingaporeDataViewControllerDelegate: class {
     func reloadData()
+    func showAlert(title: String, message: String)
 }
 
 class SingaporeDataViewController: UIViewController {
@@ -33,14 +34,14 @@ class SingaporeDataViewController: UIViewController {
   
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        viewModel.getSingaporeDataFromnService()
         viewModel.delegate = self
+        viewModel.getSingaporeDataFromnService()
         self.singaporeDataTableView.dataSource = self
         self.singaporeDataTableView.delegate = self
         self.singaporeDataTableView.tableFooterView = UIView()
+        
+        
     }
-
 
 }
 
@@ -49,6 +50,23 @@ extension SingaporeDataViewController: SingaporeDataViewControllerDelegate {
     func reloadData(){
         DispatchQueue.main.async {
             self.singaporeDataTableView.reloadData()
+        }
+    }
+    
+    func showAlert(title: String, message: String) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                switch action.style{
+                case .default:
+                    print("default")
+                case .cancel:
+                    print("cancel")
+                case .destructive:
+                    print("destructive")
+                    
+                }}))
+            self.present(alert, animated: true, completion: nil)
         }
     }
 }
@@ -79,19 +97,9 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
             message += String(format: string, i, value)
             i+=1
         }
-       
-        let alert = UIAlertController(title: String(format: "Year %@", dataRow.key), message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-            switch action.style{
-            case .default:
-                print("default")
-            case .cancel:
-                print("cancel")
-            case .destructive:
-                print("destructive")
-                
-            }}))
-        self.present(alert, animated: true, completion: nil)
+        
+        let title = String(format: "Year %@", dataRow.key)
+        showAlert(title: title, message: message)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

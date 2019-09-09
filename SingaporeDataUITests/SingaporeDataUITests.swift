@@ -26,7 +26,7 @@ class SingaporeDataUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() {
+    func testSingaporeDataUI() {
         
         let app = XCUIApplication()
         let tablesQuery = app.tables
@@ -37,9 +37,6 @@ class SingaporeDataUITests: XCTestCase {
         let consumptionHeader = tablesQuery.staticTexts["Consumption"]
         XCTAssertTrue(consumptionHeader.exists)
        
-        
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
 
 }

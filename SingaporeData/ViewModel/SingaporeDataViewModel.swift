@@ -7,9 +7,10 @@
 //
 
 import Foundation
-
+import CoreData
+import UIKit
 protocol SingaporeDataViewModelProtocol {
-    var singaporeDataTableData: [SingaporeData] {get set}
+    
     var delegate: SingaporeDataViewControllerDelegate? {get set}
     var processedSingaporeData: [(key: String, value: [String])] {get set}
     var service: ServiceUtilProtocol {get set}
@@ -22,38 +23,56 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
     
     weak var delegate: SingaporeDataViewControllerDelegate?
     var service: ServiceUtilProtocol = ServiceUtil.shared
-    var singaporeDataTableData: [SingaporeData] = []
     var processedSingaporeData: [(key: String, value: [String])] = []
     
     func getSingaporeDataFromnService() {
+        DispatchQueue.main.async {
+            let dataFromCache = self.retrieveDataFromCache()
+            self.reloadTableWithNewcontent(singaporeData: dataFromCache)
+        }
         
-        self.service.getSingaporeDataFromAPI() { (data) in
+        self.service.getSingaporeDataFromAPI() { (data, error) in
             if let singaporeData = data {
-                var dictionary:[String: [String]] = [:]
-                
-                for data in singaporeData {
-                    let quarters = data.quarter.split(separator: "-")
-                    let year = String(quarters[0])
-                    if var value = dictionary[year], value.count > 0 {
-                        value.append(data.volumeOfMobileData)
-                        dictionary.updateValue(value, forKey: year)
-                    }else{
-                        dictionary[year] = [data.volumeOfMobileData]
-                    }
+               
+                DispatchQueue.main.async {
+                    self.saveSingaporeDatatoCache(data: singaporeData)
                 }
                 
-                let sortedDictionary = dictionary.sorted{$0.key < $1.key }
-                
-                self.processedSingaporeData = sortedDictionary
-                
-                print(sortedDictionary)
-                self.delegate?.reloadData()
+                self.reloadTableWithNewcontent(singaporeData: singaporeData)
             }else{
-               self.singaporeDataTableData = []
+                if let error = error {
+                    self.delegate?.showAlert(title: "error", message: error)
+                }else {
+                    self.delegate?.showAlert(title: "error", message: "generic error")
+                }
             }
         }
     }
     
+    func reloadTableWithNewcontent (singaporeData: [SingaporeDataResponse]) {
+        var dictionary:[String: [String]] = [:]
+        
+        DispatchQueue.main.async {
+            self.saveSingaporeDatatoCache(data: singaporeData)
+        }
+        
+        for data in singaporeData {
+            let quarters = data.quarter.split(separator: "-")
+            let year = String(quarters[0])
+            if var value = dictionary[year], value.count > 0 {
+                value.append(data.volumeOfMobileData)
+                dictionary.updateValue(value, forKey: year)
+            }else{
+                dictionary[year] = [data.volumeOfMobileData]
+            }
+        }
+        
+        let sortedDictionary = dictionary.sorted { $0.key < $1.key }
+        
+        self.processedSingaporeData = sortedDictionary
+        
+        self.delegate?.reloadData()
+    }
     
     func getTotalConsumption(array:  [String]) -> String {
         
@@ -79,5 +98,93 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         
         return false
     }
+    
+    func saveSingaporeDatatoCache(data: [SingaporeDataResponse]) {
+        
+        deleteDataFromCache()
+        
+        guard  let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        guard let singaporeDataEntity = NSEntityDescription.entity(forEntityName: "ConsumptionData", in: managedContext) else{
+            return
+        }
+        
+        
+        for singaporeDataRecord in data {
+            let dataRecord = NSManagedObject(entity: singaporeDataEntity, insertInto: managedContext)
+            dataRecord.setValue(singaporeDataRecord.quarter, forKey: "quarter")
+            dataRecord.setValue(singaporeDataRecord.volumeOfMobileData, forKey: "volumeOfMobileData")
+        }
+        
+        do {
+            try managedContext.save()
+        }  catch let error as NSError {
+            print(error)
+        }
+        
+    }
+    
+    func retrieveDataFromCache() -> [SingaporeDataResponse] {
+        
+        var singaporeDataFromCache: [SingaporeDataResponse] = []
+        
+        guard  let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return []
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ConsumptionData")
+        
+        do {
+            let result = try managedContext.fetch(fetchRequest)
+            
+            for data in result as! [NSManagedObject]{
+               
+                if let quarter = data.value(forKey: "quarter") as? String {
+                    if let consumption = data.value(forKey: "volumeOfMobileData") as? String {
+                         let singaporeDatarecord = SingaporeDataResponse(volumeOfMobileData: consumption, quarter: quarter)
+                        singaporeDataFromCache.append(singaporeDatarecord)
+                    }
+                }
+            }
+            
+            return singaporeDataFromCache
+        }
+        catch let error as NSError {
+            print(error)
+        }
+        return singaporeDataFromCache
+    }
+    
+    
+    func deleteDataFromCache() {
+        
+        guard  let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "ConsumptionData")
+        
+        fetchRequest.returnsObjectsAsFaults = false
+        do {
+            let results = try managedContext.fetch(fetchRequest)
+            for object in results {
+                guard let objectData = object as? NSManagedObject else {continue}
+                managedContext.delete(objectData)
+            }
+            
+        }
+        catch let error as NSError {
+            print(error)
+        }
+    }
+    
     
 }

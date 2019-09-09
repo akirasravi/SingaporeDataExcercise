@@ -18,8 +18,4 @@ struct SingaporeDataResponse: Codable {
     }
 }
 
-struct SingaporeData: Codable {
-    let year : String
-    let quarterData: [String]
-}
 

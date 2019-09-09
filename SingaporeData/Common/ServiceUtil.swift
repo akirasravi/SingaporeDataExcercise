@@ -9,7 +9,7 @@
 import Foundation
 
 protocol ServiceUtilProtocol {
-     func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?) -> Void)
+     func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?, String?) -> Void)
 }
 
 class ServiceUtil: ServiceUtilProtocol {
@@ -18,10 +18,10 @@ class ServiceUtil: ServiceUtilProtocol {
         
     }
     
-    func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?) -> Void){
+    func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?, String?) -> Void){
         let endpointUrl: String = "https://data.gov.sg/api/action/datastore_search?resource_id=a807b7ab-6cad-4aa6-87d0-e283a7353a0f"
         guard let url = URL(string: endpointUrl) else {
-            print("Error: cannot create URL")
+            completion(nil, "Error: cannot create URL")
             return
         }
         var urlRequest = URLRequest(url: url)
@@ -32,11 +32,11 @@ class ServiceUtil: ServiceUtilProtocol {
         let task = session.dataTask(with: urlRequest) {
             (data, response, error) in
             guard error == nil else {
-                completion(nil)
+                completion(nil, "")
                 return
             }
             guard let responseData = data else {
-                 completion(nil)
+                completion(nil, "Internal server error")
                 return
             }
             do {
@@ -49,9 +49,9 @@ class ServiceUtil: ServiceUtilProtocol {
                                 let decoder = JSONDecoder()
                                 decoder.keyDecodingStrategy = .convertFromSnakeCase
                                 let decodedCountries = try decoder.decode([SingaporeDataResponse].self, from: json)
-                                completion(decodedCountries)
+                                completion(decodedCountries, nil)
                             } catch {
-                                print(error)
+                               completion(nil, "error trying to convert data to JSON")
                             }
                          
                         }
@@ -59,9 +59,7 @@ class ServiceUtil: ServiceUtilProtocol {
                 }
               
             } catch  {
-                print("error trying to convert data to JSON")
-                completion(nil)
-                
+                completion(nil, "error trying to convert data to JSON")
             }
         }
         task.resume()

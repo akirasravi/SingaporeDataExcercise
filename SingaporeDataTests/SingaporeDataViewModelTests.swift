@@ -33,7 +33,7 @@ class SingaporeDataViewModelTests: XCTestCase {
         XCTAssertEqual(2, viewModel?.processedSingaporeData.count)
     }
     
-    func testfYearDemonstratesDecreaseInVolumeData(){
+    func testfYearDemonstratesDecreaseInVolumeData() {
         //given
         let array1 = ["0.3", "0.6", "0.5", "0.9"]
         XCTAssertTrue(viewModel?.checkIfYearDemonstratesDecreaseInVolumeData(yearData: array1) ?? true)
@@ -42,14 +42,38 @@ class SingaporeDataViewModelTests: XCTestCase {
         let array2 = ["0.3", "0.6", "0.7", "0.9"]
         XCTAssertFalse(viewModel?.checkIfYearDemonstratesDecreaseInVolumeData(yearData: array2) ?? false)
     }
+    
+    func testServiceFailure() {
+        viewModel?.service = ServiceUtilErrorMock()
+        viewModel?.getSingaporeDataFromnService()
+        XCTAssertEqual(0, viewModel?.processedSingaporeData.count)
+    }
+    
+    func testSaveSingaporeDatatoCache() {
+        viewModel?.deleteDataFromCache()
+        let mockData = [SingaporeDataResponse(volumeOfMobileData: "0.899", quarter: "2019-Q1"), SingaporeDataResponse(volumeOfMobileData: "0.1", quarter: "2019-Q2"), SingaporeDataResponse(volumeOfMobileData: "0.7", quarter: "2018-Q1")]
+        
+        viewModel?.saveSingaporeDatatoCache(data: mockData)
+        if let retrievedData = viewModel?.retrieveDataFromCache() {
+            XCTAssertEqual(3, retrievedData.count)
+        }
+
+    }
 
 }
 
-class ServiceUtilMock: ServiceUtilProtocol{
-    func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?) -> Void) {
-        
+class ServiceUtilMock: ServiceUtilProtocol {
+    func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?, String?) -> Void) {
         let mockData = [SingaporeDataResponse(volumeOfMobileData: "0.899", quarter: "2019-Q1"), SingaporeDataResponse(volumeOfMobileData: "0.1", quarter: "2019-Q2"), SingaporeDataResponse(volumeOfMobileData: "0.7", quarter: "2018-Q1")]
-        completion(mockData)
+        
+        completion(mockData, nil)
+    }
+    
+}
+
+class ServiceUtilErrorMock: ServiceUtilProtocol{
+    func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?, String?) -> Void) {
+        completion(nil, "serviceError")
     }
     
 }

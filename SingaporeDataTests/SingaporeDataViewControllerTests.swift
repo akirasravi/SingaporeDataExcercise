@@ -32,5 +32,4 @@ class SingaporeDataViewControllerTests: XCTestCase {
                        "DataSource should have correct number of years")
     }
     
-    
 }
