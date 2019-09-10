@@ -12,9 +12,10 @@ import UIKit
 protocol SingaporeDataViewModelProtocol {
     
     var delegate: SingaporeDataViewControllerDelegate? {get set}
-    var processedSingaporeData: [(key: String, value: [String])] {get set}
+    var processedSingaporeData: [SingaporeDataForTable]  {get set}
     var service: ServiceUtilProtocol {get set}
-    func getTotalConsumption(array:  [String]) -> String 
+    func getTotalConsumption(array:  [String]) -> String
+    func expandCollapseRow(index: Int) 
     func getSingaporeDataFromnService()
     func checkIfYearDemonstratesDecreaseInVolumeData(yearData: [String]) -> Bool
 }
@@ -23,7 +24,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
     
     weak var delegate: SingaporeDataViewControllerDelegate?
     var service: ServiceUtilProtocol = ServiceUtil.shared
-    var processedSingaporeData: [(key: String, value: [String])] = []
+    var processedSingaporeData: [SingaporeDataForTable] = []
     
     func getSingaporeDataFromnService() {
         DispatchQueue.main.async {
@@ -74,7 +75,14 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         
         let sortedDictionary = dictionary.sorted { $0.key < $1.key }
         
-        self.processedSingaporeData = sortedDictionary
+        var sortedObjectsArray: [SingaporeDataForTable] = []
+        
+        for record in sortedDictionary {
+            let datarecord = SingaporeDataForTable(isExpandable: true, isExpanded: false, header: record.key, consumption: getTotalConsumption(array: record.value), quarterlyData: record.value)
+            sortedObjectsArray.append(datarecord)
+        }
+        
+        self.processedSingaporeData = sortedObjectsArray
         
         self.delegate?.reloadData()
     }
@@ -102,6 +110,32 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         }
         
         return false
+    }
+    
+    func expandCollapseRow(index: Int) {
+        let dataRow = self.processedSingaporeData[index]
+        
+        if dataRow.isExpanded {
+            let left = index
+            let right  = index + dataRow.quarterlyData.count
+            self.processedSingaporeData.removeSubrange(left+1..<right+1)
+            self.processedSingaporeData[index].isExpanded = false
+            self.delegate?.reloadData()
+        } else if dataRow.isExpandable {
+            var records: [SingaporeDataForTable] = []
+            var i = 1
+            for record in dataRow.quarterlyData {
+                let x = SingaporeDataForTable(isExpandable: false, isExpanded: false, header: String.init(format: "Q%d: ", i), consumption: record, quarterlyData: [])
+                records.append(x)
+                i+=1
+            }
+            self.processedSingaporeData[index].isExpanded = true
+            
+           // self.processedSingaporeData = self.processedSingaporeData.filter { $0.isExpandable == true }
+
+            self.processedSingaporeData.insert(contentsOf: records, at: index+1)
+            self.delegate?.reloadData()
+        }
     }
     
     func saveSingaporeDatatoCache(data: [SingaporeDataResponse]) {
@@ -190,6 +224,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
             print(error)
         }
     }
+    
     
     
 }

@@ -20,6 +20,7 @@
 		0ABCED8523261A3500F8E03F /* ServiceUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ABCED8423261A3500F8E03F /* ServiceUtil.swift */; };
 		8E4A0533232620300075A8DF /* SingaporeDataTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4A0532232620300075A8DF /* SingaporeDataTableViewCell.swift */; };
 		8E4A0535232671370075A8DF /* SingaporeDataViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E4A0534232671370075A8DF /* SingaporeDataViewControllerTests.swift */; };
+		8E5A412E23276C0C00782FAA /* SingaporeDataExpandedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E5A412D23276C0C00782FAA /* SingaporeDataExpandedCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		0ABCED8423261A3500F8E03F /* ServiceUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceUtil.swift; sourceTree = "<group>"; };
 		8E4A0532232620300075A8DF /* SingaporeDataTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingaporeDataTableViewCell.swift; sourceTree = "<group>"; };
 		8E4A0534232671370075A8DF /* SingaporeDataViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingaporeDataViewControllerTests.swift; sourceTree = "<group>"; };
+		8E5A412D23276C0C00782FAA /* SingaporeDataExpandedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingaporeDataExpandedCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +157,7 @@
 			children = (
 				0ABCED4D2326119800F8E03F /* SingaporeDataViewController.swift */,
 				8E4A0532232620300075A8DF /* SingaporeDataTableViewCell.swift */,
+				8E5A412D23276C0C00782FAA /* SingaporeDataExpandedCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				0ABCED8323261A2800F8E03F /* SingaporeData.swift in Sources */,
 				0ABCED8123261A1C00F8E03F /* SingaporeDataViewModel.swift in Sources */,
 				0ABCED8523261A3500F8E03F /* ServiceUtil.swift in Sources */,
+				8E5A412E23276C0C00782FAA /* SingaporeDataExpandedCell.swift in Sources */,
 				0ABCED4E2326119800F8E03F /* SingaporeDataViewController.swift in Sources */,
 				0ABCED4C2326119800F8E03F /* AppDelegate.swift in Sources */,
 			);

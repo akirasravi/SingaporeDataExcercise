@@ -18,7 +18,8 @@ class SingaporeDataViewModelTests: XCTestCase {
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        viewModel = nil
+        super.tearDown()
     }
 
     func testGetTotalConsumption() {
@@ -27,7 +28,12 @@ class SingaporeDataViewModelTests: XCTestCase {
         XCTAssertEqual("0.9", viewModel?.getTotalConsumption(array: array))
     }
     
-    
+    func testExpandCollapseRow()
+    {
+        viewModel?.getSingaporeDataFromnService()
+        viewModel?.expandCollapseRow(index: 0)
+        XCTAssertEqual(4, viewModel?.processedSingaporeData.count)
+    }
     func testGetSingaporeDataFromnService() {
         viewModel?.getSingaporeDataFromnService()
         XCTAssertEqual(2, viewModel?.processedSingaporeData.count)

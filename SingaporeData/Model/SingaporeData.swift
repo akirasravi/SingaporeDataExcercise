@@ -18,4 +18,12 @@ struct SingaporeDataResponse: Codable {
     }
 }
 
+struct SingaporeDataForTable {
+    var isExpandable: Bool
+    var isExpanded: Bool
+    var header: String
+    var consumption: String
+    var quarterlyData: [String]
+}
+
 

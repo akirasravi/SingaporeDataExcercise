@@ -16,14 +16,15 @@ class SingaporeDataTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        clickableImage.image = UIImage(named: "decrease")
         clickableImage.isUserInteractionEnabled = true
         clickableImage.contentMode = .scaleToFill
+        clickableImage.image =  UIImage()
     }
 
     func configure(yearString: String, consumptionText: String, isClickble: Bool){
         self.year?.text = yearString
         self.consumption?.text = consumptionText
         clickableImage.isHidden = !isClickble
+        clickableImage.image = isClickble ? UIImage(named: "decrease") : UIImage()
     }
 }

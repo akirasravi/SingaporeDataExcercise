@@ -71,6 +71,44 @@
                                             <outlet property="year" destination="Zge-1f-ESg" id="Uou-W1-2dL"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="singaporeDataExpandedCell" rowHeight="81" id="tdm-uJ-Ui8" customClass="SingaporeDataExpandedCell" customModule="SingaporeData" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="72" width="343" height="81"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tdm-uJ-Ui8" id="Ed4-Zk-O8f">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="80.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vyC-ZP-2Hh">
+                                                    <rect key="frame" x="32" y="11" width="86" height="59"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vsy-xB-mOH">
+                                                    <rect key="frame" x="126" y="11" width="203" height="59"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="203" id="eIg-My-b2s"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="vyC-ZP-2Hh" firstAttribute="bottom" secondItem="Ed4-Zk-O8f" secondAttribute="bottomMargin" id="3NR-pl-lwx"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="vsy-xB-mOH" secondAttribute="trailing" constant="-1" id="4NW-Md-kwp"/>
+                                                <constraint firstItem="vsy-xB-mOH" firstAttribute="firstBaseline" secondItem="vyC-ZP-2Hh" secondAttribute="firstBaseline" id="HfT-50-xpo"/>
+                                                <constraint firstItem="vsy-xB-mOH" firstAttribute="baseline" secondItem="vyC-ZP-2Hh" secondAttribute="baseline" id="cVE-Xo-U9n"/>
+                                                <constraint firstItem="vsy-xB-mOH" firstAttribute="leading" secondItem="vyC-ZP-2Hh" secondAttribute="trailing" constant="8" symbolic="YES" id="cuu-D6-l5n"/>
+                                                <constraint firstItem="vyC-ZP-2Hh" firstAttribute="leading" secondItem="Ed4-Zk-O8f" secondAttribute="leadingMargin" constant="17" id="k54-Yw-u7F"/>
+                                                <constraint firstItem="vyC-ZP-2Hh" firstAttribute="top" secondItem="Ed4-Zk-O8f" secondAttribute="topMargin" id="pXj-2t-TYq"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="consumption" destination="vsy-xB-mOH" id="4em-Yt-sgz"/>
+                                            <outlet property="quarter" destination="vyC-ZP-2Hh" id="vy9-9Y-NoD"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>

@@ -17,7 +17,7 @@ class SingaporeDataViewController: UIViewController {
     
     @IBOutlet weak var singaporeDataTableView: UITableView!
     var reuseTableIdentifier = "singaporeDataCell"
-
+    var reuseTableExpandedCellIdentifier = "singaporeDataExpandedCell"
     var viewModel: SingaporeDataViewModelProtocol = SingaporeDataViewModel()
     init(viewModel: SingaporeDataViewModelProtocol) {
         self.viewModel = viewModel
@@ -93,36 +93,52 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
         var i = 1
         var message = ""
         let string = "Q%d : %@\n"
-        for value in dataRow.value {
+        for value in dataRow.quarterlyData {
             message += String(format: string, i, value)
             i+=1
         }
         
-        let title = String(format: "Year %@", dataRow.key)
+        let title = String(format: "Year %@", dataRow.header)
         showAlert(title: title, message: message)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let singaporeDataCell = tableView.dequeueReusableCell(withIdentifier: reuseTableIdentifier, for: indexPath) as? SingaporeDataTableViewCell {
-            let dataRow = viewModel.processedSingaporeData[indexPath.row]
-            
-            let tapGesture = UITapGestureRecognizer (target: self, action: #selector(imgTap))
-            singaporeDataCell.clickableImage.addGestureRecognizer(tapGesture)
-            singaporeDataCell.clickableImage.isUserInteractionEnabled = true
-            singaporeDataCell.clickableImage.tag = indexPath.row
-            
-            let isDecreaseInVolumeData = viewModel.checkIfYearDemonstratesDecreaseInVolumeData(yearData: dataRow.value)
-            
-            singaporeDataCell.configure(yearString: dataRow.key, consumptionText: viewModel.getTotalConsumption(array: dataRow.value), isClickble: isDecreaseInVolumeData)
-            singaporeDataCell.selectionStyle = .none
-            return singaporeDataCell
-        }else{
-            return UITableViewCell()
+        let dataRow = viewModel.processedSingaporeData[indexPath.row]
+        if dataRow.isExpandable {
+            if let singaporeDataCell = tableView.dequeueReusableCell(withIdentifier: reuseTableIdentifier, for: indexPath) as? SingaporeDataTableViewCell {
+               
+                let tapGesture = UITapGestureRecognizer (target: self, action: #selector(imgTap))
+                singaporeDataCell.clickableImage.addGestureRecognizer(tapGesture)
+                singaporeDataCell.clickableImage.isUserInteractionEnabled = true
+                singaporeDataCell.clickableImage.tag = indexPath.row
+                
+                let isDecreaseInVolumeData = viewModel.checkIfYearDemonstratesDecreaseInVolumeData(yearData: dataRow.quarterlyData)
+                
+                singaporeDataCell.configure(yearString: dataRow.header, consumptionText: dataRow.consumption, isClickble: isDecreaseInVolumeData)
+                singaporeDataCell.selectionStyle = .none
+                return singaporeDataCell
+            }else{
+                return UITableViewCell()
+            }
+        } else {
+            if let singaporeDataCellExpanded = tableView.dequeueReusableCell(withIdentifier: reuseTableExpandedCellIdentifier, for: indexPath) as? SingaporeDataExpandedCell {
+                singaporeDataCellExpanded.configure(yearString: dataRow.header, consumptionText: dataRow.consumption)
+                singaporeDataCellExpanded.selectionStyle = .none
+                return singaporeDataCellExpanded
+            }else{
+                return UITableViewCell()
+            }
         }
+
     }
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 48
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+         viewModel.expandCollapseRow(index: indexPath.row)
     }
     
 }
