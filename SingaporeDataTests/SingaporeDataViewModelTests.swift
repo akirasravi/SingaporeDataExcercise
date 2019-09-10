@@ -38,6 +38,7 @@ class SingaporeDataViewModelTests: XCTestCase {
     {
         viewModel?.getSingaporeDataFromnService()
         viewModel?.expandCollapseRow(index: 0)
+        viewModel?.delegate?.reloadData()
         XCTAssertEqual(4, viewModel?.processedSingaporeData.count)
     }
     

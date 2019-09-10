@@ -38,9 +38,17 @@ class SingaporeDataViewControllerTests: XCTestCase {
                        "DataSource should have correct number of years")
    
         
+        let expandCell =  SingaporeDataExpandedCell()
+        expandCell.configure(yearString: "test", consumptionText: "test2")
+        
+        XCTAssertEqual("test", expandCell.quarter?.text)
+        XCTAssertEqual("test2", expandCell.consumption?.text)
+
         let tableView = UITableView()
         tableView.register(SingaporeDataTableViewCell.self,
                            forCellReuseIdentifier: "singaporeDataCell")
+        tableView.register(SingaporeDataTableViewCell.self,
+                           forCellReuseIdentifier: "singaporeDataExpandedCell")
         tableView.dataSource = viewController.self
         tableView.delegate = viewController.self
         tableView.reloadData()
@@ -52,11 +60,13 @@ class SingaporeDataViewControllerTests: XCTestCase {
         let cell = viewController?.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
         
         XCTAssertNotNil(cell)
-        viewController?.viewModel.processedSingaporeData = [SingaporeDataForTable(isExpandable: true, isExpanded: true, header: "2008", consumption: "0.9" , quarterlyData: ["0.4", "0.5"]),
-        SingaporeDataForTable(isExpandable: false, isExpanded: false, header: "2008", consumption: "0.4" , quarterlyData: []),
-        SingaporeDataForTable(isExpandable: false, isExpanded: false, header: "2008", consumption: "0.5" , quarterlyData: [])
-            
-        ]
+        
+        viewController?.tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 0))
+        
+        viewController?.reloadData()
+        let cell2 = viewController?.tableView(tableView, cellForRowAt: IndexPath(row: 1, section: 0))
+        
+        XCTAssertNotNil(cell2)
        
     }
 }
