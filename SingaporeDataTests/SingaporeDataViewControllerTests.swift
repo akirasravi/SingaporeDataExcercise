@@ -28,6 +28,8 @@ class SingaporeDataViewControllerTests: XCTestCase {
     
     func testViewController() {
         
+        XCTAssertNotNil(viewController?.singaporeDataTableView.delegate)
+        
         XCTAssertNotNil(viewController?.view,
                         "Controller should have a view")
         
@@ -36,35 +38,32 @@ class SingaporeDataViewControllerTests: XCTestCase {
                 
         XCTAssertEqual(viewController?.viewModel.processedSingaporeData.count, 2,
                        "DataSource should have correct number of years")
-   
         
-        let expandCell =  SingaporeDataExpandedCell()
-        expandCell.configure(yearString: "test", consumptionText: "test2")
-        
-        XCTAssertEqual("test", expandCell.quarter?.text)
-        XCTAssertEqual("test2", expandCell.consumption?.text)
 
-        let tableView = UITableView()
-        tableView.register(SingaporeDataTableViewCell.self,
-                           forCellReuseIdentifier: "singaporeDataCell")
-        tableView.register(SingaporeDataTableViewCell.self,
-                           forCellReuseIdentifier: "singaporeDataExpandedCell")
-        tableView.dataSource = viewController.self
-        tableView.delegate = viewController.self
-        tableView.reloadData()
-       
-        XCTAssertEqual(viewController?.tableView(tableView, numberOfRowsInSection: 0), 2)
+        XCTAssertTrue((viewController?.conforms(to: UITableViewDataSource.self))!)
         
-        XCTAssertEqual(viewController?.tableView(tableView, heightForRowAt: IndexPath(row: 0, section: 0)), 48)
+   
+        XCTAssertTrue((viewController?.responds(to: #selector(viewController?.tableView(_:numberOfRowsInSection:))))!)
+        XCTAssertTrue((viewController?.responds(to: #selector(viewController?.tableView(_:cellForRowAt:))))!)
+               
+        XCTAssertEqual(viewController?.tableView((viewController?.singaporeDataTableView)!, numberOfRowsInSection: 0), 2)
         
-        let cell = viewController?.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
+        XCTAssertEqual(viewController?.tableView((viewController?.singaporeDataTableView)!, heightForRowAt: IndexPath(row: 0, section: 0)), 48)
+        
+        let cell = viewController?.tableView((viewController?.singaporeDataTableView)!, cellForRowAt: IndexPath(row: 0, section: 0))
         
         XCTAssertNotNil(cell)
         
-        viewController?.tableView(tableView, didSelectRowAt: IndexPath(row: 0, section: 0))
+        let actualReuseIdentifer = cell?.reuseIdentifier
+        let expectedReuseIdentifier = "singaporeDataCell"
+        XCTAssertEqual(actualReuseIdentifer, expectedReuseIdentifier)
         
-        viewController?.reloadData()
-        let cell2 = viewController?.tableView(tableView, cellForRowAt: IndexPath(row: 1, section: 0))
+        viewController?.tableView((viewController?.singaporeDataTableView)!, didSelectRowAt: IndexPath(row: 0, section: 0))
+        
+        
+        let cell2 = viewController?.tableView((viewController?.singaporeDataTableView)!, cellForRowAt: IndexPath(row: 1, section: 0))
+        
+        XCTAssertEqual(cell2?.reuseIdentifier, "singaporeDataExpandedCell")
         
         XCTAssertNotNil(cell2)
        

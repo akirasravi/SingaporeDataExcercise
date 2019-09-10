@@ -129,8 +129,13 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
     }
     
     func expandCollapseRow(index: Int) {
+        let dataRow = self.processedSingaporeData[index]
         
+        if !dataRow.isExpandable {
+            return
+        }
         var currentIndex = index
+        
         for i in 0..<processedSingaporeData.count {
             let data = processedSingaporeData[i]
             if data.isExpanded &&  index != i {
@@ -144,8 +149,6 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
                 break
             }
         }
-        
-        let dataRow = self.processedSingaporeData[currentIndex]
         
         if dataRow.isExpanded {
             let left = currentIndex
