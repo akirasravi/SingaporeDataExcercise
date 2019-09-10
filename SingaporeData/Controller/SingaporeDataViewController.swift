@@ -8,7 +8,9 @@
 
 import UIKit
 
+// protocol to perform UI operations from view Model
 protocol SingaporeDataViewControllerDelegate: class {
+    
     func reloadData()
     func showAlert(title: String, message: String)
 }
@@ -16,9 +18,12 @@ protocol SingaporeDataViewControllerDelegate: class {
 class SingaporeDataViewController: UIViewController {
     
     @IBOutlet weak var singaporeDataTableView: UITableView!
+    
     var reuseTableIdentifier = "singaporeDataCell"
     var reuseTableExpandedCellIdentifier = "singaporeDataExpandedCell"
+    
     var viewModel: SingaporeDataViewModelProtocol = SingaporeDataViewModel()
+    
     init(viewModel: SingaporeDataViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -47,6 +52,7 @@ class SingaporeDataViewController: UIViewController {
 
 
 extension SingaporeDataViewController: SingaporeDataViewControllerDelegate {
+    
     func reloadData(){
         DispatchQueue.main.async {
             self.singaporeDataTableView.reloadData()
@@ -54,6 +60,7 @@ extension SingaporeDataViewController: SingaporeDataViewControllerDelegate {
     }
     
     func showAlert(title: String, message: String) {
+        
         DispatchQueue.main.async {
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
@@ -72,6 +79,7 @@ extension SingaporeDataViewController: SingaporeDataViewControllerDelegate {
 }
 
 extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.processedSingaporeData.count
     }
@@ -87,13 +95,15 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
 
     }
     
-    @objc func imgTap(tapGesture: UITapGestureRecognizer) {
+    @objc func imgTap(tapGesture: UITapGestureRecognizer) { //clickable Image click
+        
         let imgView = tapGesture.view as! UIImageView
         let dataRow = viewModel.processedSingaporeData[imgView.tag]
         viewModel.getYearDataAndShow(dataRow: dataRow)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let dataRow = viewModel.processedSingaporeData[indexPath.row]
         if dataRow.isExpandable {
             if let singaporeDataCell = tableView.dequeueReusableCell(withIdentifier: reuseTableIdentifier, for: indexPath) as? SingaporeDataTableViewCell {
@@ -125,10 +135,12 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
         return 48
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
          viewModel.expandCollapseRow(index: indexPath.row)
     }
     

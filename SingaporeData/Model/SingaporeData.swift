@@ -18,7 +18,7 @@ struct SingaporeDataResponse: Codable {
     }
 }
 
-struct SingaporeDataForTable {
+struct SingaporeDataModel {
     var isExpandable: Bool
     var isExpanded: Bool
     var header: String

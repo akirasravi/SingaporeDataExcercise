@@ -12,10 +12,10 @@ import UIKit
 protocol SingaporeDataViewModelProtocol {
     
     var delegate: SingaporeDataViewControllerDelegate? {get set}
-    var processedSingaporeData: [SingaporeDataForTable]  {get set}
+    var processedSingaporeData: [SingaporeDataModel]  {get set}
     var service: ServiceUtilProtocol {get set}
     func getTotalConsumption(array:  [String]) -> String
-    func getYearDataAndShow(dataRow: SingaporeDataForTable)
+    func getYearDataAndShow(dataRow: SingaporeDataModel)
     func expandCollapseRow(index: Int)
     func getSingaporeDataFromnService()
     func checkIfYearDemonstratesDecreaseInVolumeData(yearData: [String]) -> Bool
@@ -24,12 +24,13 @@ protocol SingaporeDataViewModelProtocol {
 class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
     
     weak var delegate: SingaporeDataViewControllerDelegate?
-    var service: ServiceUtilProtocol = ServiceUtil.shared
-    var processedSingaporeData: [SingaporeDataForTable] = []
+    var service: ServiceUtilProtocol = ServiceUtil.shared // can inject  mock in testcases
+    var processedSingaporeData: [SingaporeDataModel] = []
     
     func getSingaporeDataFromnService() {
         
         self.service.getSingaporeDataFromAPI() { (data, error) in
+            
             if let singaporeData = data {
                
                 DispatchQueue.main.async {
@@ -54,6 +55,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
     }
     
     func reloadTableWithNewContent (singaporeData: [SingaporeDataResponse]) {
+        
         var dictionary:[String: [String]] = [:]
         
         DispatchQueue.main.async {
@@ -61,6 +63,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         }
         
         for data in singaporeData {
+            
             let quarters = data.quarter.split(separator: "-")
             let year = String(quarters[0])
             
@@ -78,10 +81,10 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         
         let sortedDictionary = dictionary.sorted { $0.key < $1.key }
         
-        var sortedObjectsArray: [SingaporeDataForTable] = []
+        var sortedObjectsArray: [SingaporeDataModel] = []
         
         for record in sortedDictionary {
-            let datarecord = SingaporeDataForTable(isExpandable: true, isExpanded: false, header: record.key, consumption: getTotalConsumption(array: record.value), quarterlyData: record.value)
+            let datarecord = SingaporeDataModel(isExpandable: true, isExpanded: false, header: record.key, consumption: getTotalConsumption(array: record.value), quarterlyData: record.value)
             sortedObjectsArray.append(datarecord)
         }
         
@@ -115,7 +118,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         return false
     }
     
-    func getYearDataAndShow(dataRow: SingaporeDataForTable) {
+    func getYearDataAndShow(dataRow: SingaporeDataModel) {
         var i = 1
         var message = ""
         let string = "Q%d : %@\n"
@@ -136,7 +139,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         }
         var currentIndex = index
         
-        for i in 0..<processedSingaporeData.count {
+        for i in 0..<processedSingaporeData.count { //code to  collapse previous expanded cell if any
             let data = processedSingaporeData[i]
             if data.isExpanded &&  index != i {
                 let left = i
@@ -151,16 +154,18 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         }
         
         if dataRow.isExpanded {
+            
             let left = currentIndex
             let right  = currentIndex + dataRow.quarterlyData.count
             self.processedSingaporeData.removeSubrange(left+1..<right+1)
             self.processedSingaporeData[currentIndex].isExpanded = false
             self.delegate?.reloadData()
         } else if dataRow.isExpandable {
-            var records: [SingaporeDataForTable] = []
+            
+            var records: [SingaporeDataModel] = []
             
             for i in 0..<dataRow.quarterlyData.count {
-                let dataRecord = SingaporeDataForTable(isExpandable: false, isExpanded: false, header: String.init(format: "Q%d: ", i+1), consumption: dataRow.quarterlyData[i], quarterlyData: [])
+                let dataRecord = SingaporeDataModel(isExpandable: false, isExpanded: false, header: String.init(format: "Q%d: ", i+1), consumption: dataRow.quarterlyData[i], quarterlyData: [])
                 records.append(dataRecord)
             }
             
@@ -187,6 +192,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         
         
         for singaporeDataRecord in data {
+            
             let dataRecord = NSManagedObject(entity: singaporeDataEntity, insertInto: managedContext)
             dataRecord.setValue(singaporeDataRecord.quarter, forKey: "quarter")
             dataRecord.setValue(singaporeDataRecord.volumeOfMobileData, forKey: "volumeOfMobileData")

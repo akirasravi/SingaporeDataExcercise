@@ -43,7 +43,7 @@ class SingaporeDataViewModelTests: XCTestCase {
     }
     
     func testGetYearDataAndShow() {
-        viewModel?.getYearDataAndShow(dataRow: SingaporeDataForTable(isExpandable: true, isExpanded: false, header: "2009", consumption: "17", quarterlyData: []))
+        viewModel?.getYearDataAndShow(dataRow: SingaporeDataModel(isExpandable: true, isExpanded: false, header: "2009", consumption: "17", quarterlyData: []))
         XCTAssertTrue(showAlertWasCalled)
     }
     
@@ -104,6 +104,5 @@ class ServiceUtilErrorMock: ServiceUtilProtocol{
     func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?, String?) -> Void) {
         completion(nil, "serviceError")
     }
-    
 }
 
