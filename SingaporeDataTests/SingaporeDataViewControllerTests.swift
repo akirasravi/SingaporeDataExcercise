@@ -52,5 +52,11 @@ class SingaporeDataViewControllerTests: XCTestCase {
         let cell = viewController?.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
         
         XCTAssertNotNil(cell)
+        viewController?.viewModel.processedSingaporeData = [SingaporeDataForTable(isExpandable: true, isExpanded: true, header: "2008", consumption: "0.9" , quarterlyData: ["0.4", "0.5"]),
+        SingaporeDataForTable(isExpandable: false, isExpanded: false, header: "2008", consumption: "0.4" , quarterlyData: []),
+        SingaporeDataForTable(isExpandable: false, isExpanded: false, header: "2008", consumption: "0.5" , quarterlyData: [])
+            
+        ]
+       
     }
 }

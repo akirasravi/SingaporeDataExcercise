@@ -129,27 +129,41 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
     }
     
     func expandCollapseRow(index: Int) {
-        let dataRow = self.processedSingaporeData[index]
+        
+        var currentIndex = index
+        for i in 0..<processedSingaporeData.count {
+            let data = processedSingaporeData[i]
+            if data.isExpanded &&  index != i {
+                let left = i
+                let right  = i + data.quarterlyData.count
+                self.processedSingaporeData.removeSubrange(left+1..<right+1)
+                self.processedSingaporeData[i].isExpanded = false
+                if i < index {
+                    currentIndex = index - data.quarterlyData.count
+                }
+                break
+            }
+        }
+        
+        let dataRow = self.processedSingaporeData[currentIndex]
         
         if dataRow.isExpanded {
-            let left = index
-            let right  = index + dataRow.quarterlyData.count
+            let left = currentIndex
+            let right  = currentIndex + dataRow.quarterlyData.count
             self.processedSingaporeData.removeSubrange(left+1..<right+1)
-            self.processedSingaporeData[index].isExpanded = false
+            self.processedSingaporeData[currentIndex].isExpanded = false
             self.delegate?.reloadData()
         } else if dataRow.isExpandable {
             var records: [SingaporeDataForTable] = []
-            var i = 1
-            for record in dataRow.quarterlyData {
-                let x = SingaporeDataForTable(isExpandable: false, isExpanded: false, header: String.init(format: "Q%d: ", i), consumption: record, quarterlyData: [])
-                records.append(x)
-                i+=1
-            }
-            self.processedSingaporeData[index].isExpanded = true
             
-           // self.processedSingaporeData = self.processedSingaporeData.filter { $0.isExpandable == true }
-
-            self.processedSingaporeData.insert(contentsOf: records, at: index+1)
+            for i in 0..<dataRow.quarterlyData.count {
+                let dataRecord = SingaporeDataForTable(isExpandable: false, isExpanded: false, header: String.init(format: "Q%d: ", i+1), consumption: dataRow.quarterlyData[i], quarterlyData: [])
+                records.append(dataRecord)
+            }
+            
+            self.processedSingaporeData[currentIndex].isExpanded = true
+            
+            self.processedSingaporeData.insert(contentsOf: records, at: currentIndex+1)
             self.delegate?.reloadData()
         }
     }

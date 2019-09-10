@@ -36,7 +36,6 @@ class SingaporeDataUITests: XCTestCase {
         
         let consumptionHeader = tablesQuery.staticTexts["Consumption"]
         XCTAssertTrue(consumptionHeader.exists)
-       
     }
 
 }
