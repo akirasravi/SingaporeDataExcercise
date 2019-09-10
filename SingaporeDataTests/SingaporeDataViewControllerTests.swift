@@ -42,8 +42,17 @@ class SingaporeDataViewControllerTests: XCTestCase {
 
         XCTAssertTrue((viewController?.conforms(to: UITableViewDataSource.self))!)
         
-   
+        
+        XCTAssertTrue((self.viewController?.responds(to: #selector(viewController?.showAlert(title:message:))))!)
+        
+        XCTAssertTrue((self.viewController?.responds(to: #selector(viewController?.deleteRows(index:count:))))!)
+        
+        XCTAssertTrue((self.viewController?.responds(to: #selector(viewController?.insertRows(index:count:))))!)
+        
+        
         XCTAssertTrue((viewController?.responds(to: #selector(viewController?.tableView(_:numberOfRowsInSection:))))!)
+        
+        
         XCTAssertTrue((viewController?.responds(to: #selector(viewController?.tableView(_:cellForRowAt:))))!)
                
         XCTAssertEqual(viewController?.tableView((viewController?.singaporeDataTableView)!, numberOfRowsInSection: 0), 2)
@@ -56,16 +65,13 @@ class SingaporeDataViewControllerTests: XCTestCase {
         
         let actualReuseIdentifer = cell?.reuseIdentifier
         let expectedReuseIdentifier = "singaporeDataCell"
+        
+        self.viewController?.tableView((self.viewController?.singaporeDataTableView)!, didSelectRowAt: IndexPath(row: 0, section: 0))
+        
         XCTAssertEqual(actualReuseIdentifer, expectedReuseIdentifier)
         
-        viewController?.tableView((viewController?.singaporeDataTableView)!, didSelectRowAt: IndexPath(row: 0, section: 0))
         
-        
-        let cell2 = viewController?.tableView((viewController?.singaporeDataTableView)!, cellForRowAt: IndexPath(row: 1, section: 0))
-        
-        XCTAssertEqual(cell2?.reuseIdentifier, "singaporeDataExpandedCell")
-        
-        XCTAssertNotNil(cell2)
        
     }
+
 }

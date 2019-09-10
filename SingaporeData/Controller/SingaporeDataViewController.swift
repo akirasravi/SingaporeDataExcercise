@@ -13,6 +13,10 @@ protocol SingaporeDataViewControllerDelegate: class {
     
     func reloadData()
     func showAlert(title: String, message: String)
+    func insertRows(index: Int, count: Int)
+    func deleteRows(index: Int, count: Int)
+    func beginUpdates()
+    func endUpdates()
 }
 
 class SingaporeDataViewController: UIViewController {
@@ -47,19 +51,60 @@ class SingaporeDataViewController: UIViewController {
         self.singaporeDataTableView.bounces = false
         
     }
+    
+    @objc func imgTap(tapGesture: UITapGestureRecognizer) { //clickable Image click
+        
+        let imgView = tapGesture.view as! UIImageView
+        let index = viewModel.checkAndGiveNewIdexOfImage(index: imgView.tag)
+        let dataRow = viewModel.processedSingaporeData[index]
+        viewModel.getYearDataAndShow(dataRow: dataRow)
+    }
 
 }
 
 
 extension SingaporeDataViewController: SingaporeDataViewControllerDelegate {
+    @objc func beginUpdates() {
+        DispatchQueue.main.async {
+            self.singaporeDataTableView.beginUpdates()
+        }
+    }
     
-    func reloadData(){
+   @objc func endUpdates() {
+        DispatchQueue.main.async {
+            self.singaporeDataTableView.endUpdates()
+        }
+    }
+    
+    
+   @objc func insertRows(index: Int, count: Int) {
+        DispatchQueue.main.async {
+           // self.singaporeDataTableView.beginUpdates()
+            for i in 1..<count+1 {
+                self.singaporeDataTableView.insertRows(at:[IndexPath(row: index+i, section: 0)] , with: .automatic)
+            }
+            //self.singaporeDataTableView.endUpdates()
+            
+        }
+    }
+    
+    @objc func deleteRows(index: Int, count: Int){
+        DispatchQueue.main.async {
+           // self.singaporeDataTableView.beginUpdates()
+            for i in 1..<count+1 {
+                self.singaporeDataTableView.deleteRows(at:[IndexPath(row: index+i, section: 0)] , with: .automatic)
+            }
+           // self.singaporeDataTableView.endUpdates()
+        }
+    }
+    
+    @objc func reloadData(){
         DispatchQueue.main.async {
             self.singaporeDataTableView.reloadData()
         }
     }
     
-    func showAlert(title: String, message: String) {
+    @objc func showAlert(title: String, message: String) {
         
         DispatchQueue.main.async {
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -93,13 +138,6 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
             return UITableViewCell()
         }
 
-    }
-    
-    @objc func imgTap(tapGesture: UITapGestureRecognizer) { //clickable Image click
-        
-        let imgView = tapGesture.view as! UIImageView
-        let dataRow = viewModel.processedSingaporeData[imgView.tag]
-        viewModel.getYearDataAndShow(dataRow: dataRow)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -140,8 +178,9 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-         viewModel.expandCollapseRow(index: indexPath.row)
+        DispatchQueue.main.async {
+            self.viewModel.expandCollapseRow(index: indexPath.row)
+        }
     }
     
 }

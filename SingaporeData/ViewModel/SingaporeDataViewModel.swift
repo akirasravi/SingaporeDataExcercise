@@ -19,6 +19,7 @@ protocol SingaporeDataViewModelProtocol {
     func expandCollapseRow(index: Int)
     func getSingaporeDataFromnService()
     func checkIfYearDemonstratesDecreaseInVolumeData(yearData: [String]) -> Bool
+    func checkAndGiveNewIdexOfImage(index: Int) -> Int
 }
 
 class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
@@ -131,6 +132,18 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         self.delegate?.showAlert(title: title, message: message)
     }
     
+    func checkAndGiveNewIdexOfImage(index: Int) -> Int {
+        for i in 0..<processedSingaporeData.count {
+            let data = processedSingaporeData[i]
+            if data.isExpanded {
+                if i < index {
+                    return index + data.quarterlyData.count
+                }
+            }
+        }
+        return index
+    }
+    
     func expandCollapseRow(index: Int) {
         let dataRow = self.processedSingaporeData[index]
         
@@ -138,6 +151,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
             return
         }
         var currentIndex = index
+        self.delegate?.beginUpdates()
         
         for i in 0..<processedSingaporeData.count { //code to  collapse previous expanded cell if any
             let data = processedSingaporeData[i]
@@ -149,6 +163,7 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
                 if i < index {
                     currentIndex = index - data.quarterlyData.count
                 }
+                self.delegate?.deleteRows(index: i, count: data.quarterlyData.count)
                 break
             }
         }
@@ -159,7 +174,8 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
             let right  = currentIndex + dataRow.quarterlyData.count
             self.processedSingaporeData.removeSubrange(left+1..<right+1)
             self.processedSingaporeData[currentIndex].isExpanded = false
-            self.delegate?.reloadData()
+            self.delegate?.deleteRows(index: currentIndex, count: dataRow.quarterlyData.count)
+            //self.delegate?.reloadData()
         } else if dataRow.isExpandable {
             
             var records: [SingaporeDataModel] = []
@@ -172,8 +188,11 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
             self.processedSingaporeData[currentIndex].isExpanded = true
             
             self.processedSingaporeData.insert(contentsOf: records, at: currentIndex+1)
-            self.delegate?.reloadData()
+            self.delegate?.insertRows(index: currentIndex, count: records.count)
+           // self.delegate?.reloadData()
         }
+        self.delegate?.endUpdates()
+        
     }
     
     func saveSingaporeDatatoCache(data: [SingaporeDataResponse]) {

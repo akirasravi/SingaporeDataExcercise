@@ -13,10 +13,18 @@ class SingaporeDataViewModelTests: XCTestCase {
     var viewModel: SingaporeDataViewModel?
     var reloadDataWasCalled: Bool = false
     var showAlertWasCalled: Bool = false
-    
+    var insertRowsWasCalled: Bool = false
+    var deleteRowsWasCalled: Bool = false
+    var beginUpdatesWasCalled: Bool = false
+    var endUpdatesWasCalled: Bool = false
+
     override func setUp() {
         reloadDataWasCalled = false
         showAlertWasCalled = false
+        insertRowsWasCalled = false
+        deleteRowsWasCalled = false
+        beginUpdatesWasCalled = false
+        endUpdatesWasCalled = false
         viewModel = SingaporeDataViewModel()
         viewModel?.service = ServiceUtilMock()
         viewModel?.delegate = self
@@ -38,8 +46,15 @@ class SingaporeDataViewModelTests: XCTestCase {
     {
         viewModel?.getSingaporeDataFromnService()
         viewModel?.expandCollapseRow(index: 0)
-        viewModel?.delegate?.reloadData()
         XCTAssertEqual(4, viewModel?.processedSingaporeData.count)
+        XCTAssertTrue(insertRowsWasCalled)
+        XCTAssertTrue(beginUpdatesWasCalled)
+        XCTAssertTrue(endUpdatesWasCalled)
+
+    }
+    
+    func testCheck() {
+        XCTAssertEqual(viewModel?.checkAndGiveNewIdexOfImage(index: 0), 0)
     }
     
     func testGetYearDataAndShow() {
@@ -82,6 +97,22 @@ class SingaporeDataViewModelTests: XCTestCase {
 }
 
 extension SingaporeDataViewModelTests: SingaporeDataViewControllerDelegate {
+    func insertRows(index: Int, count: Int) {
+        insertRowsWasCalled = true
+    }
+    
+    func deleteRows(index: Int, count: Int) {
+        deleteRowsWasCalled = true
+    }
+    
+    func beginUpdates() {
+        beginUpdatesWasCalled = true
+    }
+    
+    func endUpdates() {
+        endUpdatesWasCalled = true
+    }
+    
     func reloadData() {
         reloadDataWasCalled = true
     }
