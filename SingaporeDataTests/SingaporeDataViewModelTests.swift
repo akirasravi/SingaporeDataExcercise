@@ -11,9 +11,15 @@ import XCTest
 
 class SingaporeDataViewModelTests: XCTestCase {
     var viewModel: SingaporeDataViewModel?
+    var reloadDataWasCalled: Bool = false
+    var showAlertWasCalled: Bool = false
+    
     override func setUp() {
+        reloadDataWasCalled = false
+        showAlertWasCalled = false
         viewModel = SingaporeDataViewModel()
         viewModel?.service = ServiceUtilMock()
+        viewModel?.delegate = self
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
@@ -34,6 +40,12 @@ class SingaporeDataViewModelTests: XCTestCase {
         viewModel?.expandCollapseRow(index: 0)
         XCTAssertEqual(4, viewModel?.processedSingaporeData.count)
     }
+    
+    func testGetYearDataAndShow() {
+        viewModel?.getYearDataAndShow(dataRow: SingaporeDataForTable(isExpandable: true, isExpanded: false, header: "2009", consumption: "17", quarterlyData: []))
+        XCTAssertTrue(showAlertWasCalled)
+    }
+    
     func testGetSingaporeDataFromnService() {
         viewModel?.getSingaporeDataFromnService()
         XCTAssertEqual(2, viewModel?.processedSingaporeData.count)
@@ -66,6 +78,16 @@ class SingaporeDataViewModelTests: XCTestCase {
 
     }
 
+}
+
+extension SingaporeDataViewModelTests: SingaporeDataViewControllerDelegate {
+    func reloadData() {
+        reloadDataWasCalled = true
+    }
+    
+    func showAlert(title: String, message: String) {
+        showAlertWasCalled = true
+    }
 }
 
 class ServiceUtilMock: ServiceUtilProtocol {

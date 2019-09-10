@@ -24,7 +24,7 @@ class SingaporeDataTableViewCell: UITableViewCell {
     func configure(yearString: String, consumptionText: String, isClickble: Bool){
         self.year?.text = yearString
         self.consumption?.text = consumptionText
-        clickableImage.isHidden = !isClickble
-        clickableImage.image = isClickble ? UIImage(named: "decrease") : UIImage()
+        self.clickableImage?.isHidden = !isClickble
+        self.clickableImage?.image = isClickble ? UIImage(named: "decrease") : UIImage()
     }
 }

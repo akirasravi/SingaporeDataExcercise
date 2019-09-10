@@ -39,7 +39,7 @@ class SingaporeDataViewController: UIViewController {
         self.singaporeDataTableView.dataSource = self
         self.singaporeDataTableView.delegate = self
         self.singaporeDataTableView.tableFooterView = UIView()
-        
+        self.singaporeDataTableView.bounces = false
         
     }
 
@@ -90,16 +90,7 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
     @objc func imgTap(tapGesture: UITapGestureRecognizer) {
         let imgView = tapGesture.view as! UIImageView
         let dataRow = viewModel.processedSingaporeData[imgView.tag]
-        var i = 1
-        var message = ""
-        let string = "Q%d : %@\n"
-        for value in dataRow.quarterlyData {
-            message += String(format: string, i, value)
-            i+=1
-        }
-        
-        let title = String(format: "Year %@", dataRow.header)
-        showAlert(title: title, message: message)
+        viewModel.getYearDataAndShow(dataRow: dataRow)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -108,9 +99,9 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
             if let singaporeDataCell = tableView.dequeueReusableCell(withIdentifier: reuseTableIdentifier, for: indexPath) as? SingaporeDataTableViewCell {
                
                 let tapGesture = UITapGestureRecognizer (target: self, action: #selector(imgTap))
-                singaporeDataCell.clickableImage.addGestureRecognizer(tapGesture)
-                singaporeDataCell.clickableImage.isUserInteractionEnabled = true
-                singaporeDataCell.clickableImage.tag = indexPath.row
+                singaporeDataCell.clickableImage?.addGestureRecognizer(tapGesture)
+                singaporeDataCell.clickableImage?.isUserInteractionEnabled = true
+                singaporeDataCell.clickableImage?.tag = indexPath.row
                 
                 let isDecreaseInVolumeData = viewModel.checkIfYearDemonstratesDecreaseInVolumeData(yearData: dataRow.quarterlyData)
                 

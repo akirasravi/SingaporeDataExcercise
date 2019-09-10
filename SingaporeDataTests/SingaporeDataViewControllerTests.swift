@@ -11,6 +11,7 @@ import XCTest
 
 class SingaporeDataViewControllerTests: XCTestCase {
     var viewController: SingaporeDataViewController?
+
     override func setUp() {
         super.setUp()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -26,11 +27,30 @@ class SingaporeDataViewControllerTests: XCTestCase {
     }
     
     func testViewController() {
+        
+        XCTAssertNotNil(viewController?.view,
+                        "Controller should have a view")
+        
         XCTAssertNotNil(viewController?.singaporeDataTableView,
                         "Controller should have a tableview")
                 
         XCTAssertEqual(viewController?.viewModel.processedSingaporeData.count, 2,
                        "DataSource should have correct number of years")
+   
+        
+        let tableView = UITableView()
+        tableView.register(SingaporeDataTableViewCell.self,
+                           forCellReuseIdentifier: "singaporeDataCell")
+        tableView.dataSource = viewController.self
+        tableView.delegate = viewController.self
+        tableView.reloadData()
+       
+        XCTAssertEqual(viewController?.tableView(tableView, numberOfRowsInSection: 0), 2)
+        
+        XCTAssertEqual(viewController?.tableView(tableView, heightForRowAt: IndexPath(row: 0, section: 0)), 48)
+        
+        let cell = viewController?.tableView(tableView, cellForRowAt: IndexPath(row: 0, section: 0))
+        
+        XCTAssertNotNil(cell)
     }
-    
 }

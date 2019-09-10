@@ -15,7 +15,8 @@ protocol SingaporeDataViewModelProtocol {
     var processedSingaporeData: [SingaporeDataForTable]  {get set}
     var service: ServiceUtilProtocol {get set}
     func getTotalConsumption(array:  [String]) -> String
-    func expandCollapseRow(index: Int) 
+    func getYearDataAndShow(dataRow: SingaporeDataForTable)
+    func expandCollapseRow(index: Int)
     func getSingaporeDataFromnService()
     func checkIfYearDemonstratesDecreaseInVolumeData(yearData: [String]) -> Bool
 }
@@ -27,10 +28,6 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
     var processedSingaporeData: [SingaporeDataForTable] = []
     
     func getSingaporeDataFromnService() {
-        DispatchQueue.main.async {
-            let dataFromCache = self.retrieveDataFromCache()
-            self.reloadTableWithNewContent(singaporeData: dataFromCache)
-        }
         
         self.service.getSingaporeDataFromAPI() { (data, error) in
             if let singaporeData = data {
@@ -41,6 +38,12 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
                 
                 self.reloadTableWithNewContent(singaporeData: singaporeData)
             }else{
+                //if API failed fetch data from cache
+                DispatchQueue.main.async {
+                    let dataFromCache = self.retrieveDataFromCache()
+                    self.reloadTableWithNewContent(singaporeData: dataFromCache)
+                }
+                
                 if let error = error {
                     self.delegate?.showAlert(title: "error", message: error)
                 }else {
@@ -110,6 +113,19 @@ class SingaporeDataViewModel: SingaporeDataViewModelProtocol{
         }
         
         return false
+    }
+    
+    func getYearDataAndShow(dataRow: SingaporeDataForTable) {
+        var i = 1
+        var message = ""
+        let string = "Q%d : %@\n"
+        for value in dataRow.quarterlyData {
+            message += String(format: string, i, value)
+            i+=1
+        }
+        
+        let title = String(format: "Year %@", dataRow.header)
+        self.delegate?.showAlert(title: title, message: message)
     }
     
     func expandCollapseRow(index: Int) {

@@ -65,6 +65,7 @@
                                                 <constraint firstItem="lHK-pk-aVd" firstAttribute="leading" secondItem="Yj5-eW-U1U" secondAttribute="trailing" constant="21" id="u1v-gj-Mgz"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="clickableImage" destination="lHK-pk-aVd" id="Za4-G1-6be"/>
                                             <outlet property="consumption" destination="Yj5-eW-U1U" id="Std-IY-Fsv"/>
