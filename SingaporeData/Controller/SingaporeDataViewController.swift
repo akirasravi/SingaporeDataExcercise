@@ -64,20 +64,19 @@ class SingaporeDataViewController: UIViewController {
 
 
 extension SingaporeDataViewController: SingaporeDataViewControllerDelegate {
-    @objc func beginUpdates() {
+    func beginUpdates() {
         DispatchQueue.main.async {
             self.singaporeDataTableView.beginUpdates()
         }
     }
     
-   @objc func endUpdates() {
+    func endUpdates() {
         DispatchQueue.main.async {
             self.singaporeDataTableView.endUpdates()
         }
     }
     
-    
-   @objc func insertRows(index: Int, count: Int) {
+    func insertRows(index: Int, count: Int) {
         DispatchQueue.main.async {
            // self.singaporeDataTableView.beginUpdates()
             for i in 1..<count+1 {
@@ -88,7 +87,7 @@ extension SingaporeDataViewController: SingaporeDataViewControllerDelegate {
         }
     }
     
-    @objc func deleteRows(index: Int, count: Int){
+    func deleteRows(index: Int, count: Int){
         DispatchQueue.main.async {
            // self.singaporeDataTableView.beginUpdates()
             for i in 1..<count+1 {
@@ -98,13 +97,13 @@ extension SingaporeDataViewController: SingaporeDataViewControllerDelegate {
         }
     }
     
-    @objc func reloadData(){
+    func reloadData(){
         DispatchQueue.main.async {
             self.singaporeDataTableView.reloadData()
         }
     }
     
-    @objc func showAlert(title: String, message: String) {
+    func showAlert(title: String, message: String) {
         
         DispatchQueue.main.async {
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)

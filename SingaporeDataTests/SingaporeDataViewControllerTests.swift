@@ -28,7 +28,7 @@ class SingaporeDataViewControllerTests: XCTestCase {
         super.tearDown()
     }
     
-    func testViewController() {
+    func testViewControllerTableView() {
         
         XCTAssertNotNil(viewController?.singaporeDataTableView.delegate)
         
@@ -43,13 +43,6 @@ class SingaporeDataViewControllerTests: XCTestCase {
         
 
         XCTAssertTrue((viewController?.conforms(to: UITableViewDataSource.self))!)
-        
-        
-        XCTAssertTrue((self.viewController?.responds(to: #selector(viewController?.showAlert(title:message:))))!)
-        
-        XCTAssertTrue((self.viewController?.responds(to: #selector(viewController?.deleteRows(index:count:))))!)
-        
-        XCTAssertTrue((self.viewController?.responds(to: #selector(viewController?.insertRows(index:count:))))!)
         
         
         XCTAssertTrue((viewController?.responds(to: #selector(viewController?.tableView(_:numberOfRowsInSection:))))!)
@@ -67,8 +60,15 @@ class SingaporeDataViewControllerTests: XCTestCase {
 
         XCTAssertNotNil(cell)
         XCTAssertEqual(actualReuseIdentifer, expectedReuseIdentifier)
+ 
+    }
+    
+    
+    func testExpansionAndCollapseOfTableRow() {
+        self.viewController?.tableView((self.viewController?.singaporeDataTableView)!, didSelectRowAt: IndexPath(row: 0, section: 0)) //expand
         
-        self.viewController?.tableView((self.viewController?.singaporeDataTableView)!, didSelectRowAt: IndexPath(row: 0, section: 0))
+        
+        let expectedReuseIdentifier = "singaporeDataExpandedCell"
         
         let expectation = XCTestExpectation(description: "wait until didSelectRowAt done in main thread")
         
@@ -78,10 +78,28 @@ class SingaporeDataViewControllerTests: XCTestCase {
         
         wait(for: [expectation], timeout: 10.0)
         
+        let cell = self.viewController?.tableView((self.viewController?.singaporeDataTableView)!, cellForRowAt: IndexPath(row: 1, section: 0))
+        let actualReuseIdentifer = cell?.reuseIdentifier
+
+        XCTAssertNotNil(cell)
+        XCTAssertEqual(expectedReuseIdentifier, actualReuseIdentifer)
+        
+        self.viewController?.tableView((self.viewController?.singaporeDataTableView)!, didSelectRowAt: IndexPath(row: 0, section: 0)) //collapse
+        
+        let expectation2 = XCTestExpectation(description: "wait until didSelectRowAt done in main thread")
+        
+        DispatchQueue.main.async {
+            expectation2.fulfill()
+        }
+        
+        wait(for: [expectation2], timeout: 10.0)
+        
         let cell2 = self.viewController?.tableView((self.viewController?.singaporeDataTableView)!, cellForRowAt: IndexPath(row: 1, section: 0))
         XCTAssertNotNil(cell2)
-        XCTAssertEqual("singaporeDataExpandedCell", cell2?.reuseIdentifier)
- 
+        XCTAssertEqual("singaporeDataCell", cell2?.reuseIdentifier)
+        
     }
+    
+    
 
 }
