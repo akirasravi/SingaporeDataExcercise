@@ -144,7 +144,7 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
         
         let dataRow = viewModel.processedSingaporeData[indexPath.row]
         if dataRow.isExpandable {
-            if let singaporeDataCell = tableView.dequeueReusableCell(withIdentifier: reuseTableIdentifier, for: indexPath) as? SingaporeDataTableViewCell {
+            if let singaporeDataCell = tableView.dequeueReusableCell(withIdentifier: reuseTableIdentifier) as? SingaporeDataTableViewCell {
                
                 let tapGesture = UITapGestureRecognizer (target: self, action: #selector(imgTap))
                 singaporeDataCell.clickableImage?.addGestureRecognizer(tapGesture)
@@ -160,7 +160,7 @@ extension SingaporeDataViewController: UITableViewDelegate, UITableViewDataSourc
                 return UITableViewCell()
             }
         } else {
-            if let singaporeDataCellExpanded = tableView.dequeueReusableCell(withIdentifier: reuseTableExpandedCellIdentifier, for: indexPath) as? SingaporeDataExpandedCell {
+            if let singaporeDataCellExpanded = tableView.dequeueReusableCell(withIdentifier: reuseTableExpandedCellIdentifier) as? SingaporeDataExpandedCell {
                 singaporeDataCellExpanded.configure(yearString: dataRow.header, consumptionText: dataRow.consumption)
                 singaporeDataCellExpanded.selectionStyle = .none
                 return singaporeDataCellExpanded

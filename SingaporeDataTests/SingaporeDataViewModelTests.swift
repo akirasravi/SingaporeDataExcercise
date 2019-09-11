@@ -46,7 +46,7 @@ class SingaporeDataViewModelTests: XCTestCase {
     {
         viewModel?.getSingaporeDataFromnService()
         viewModel?.expandCollapseRow(index: 0)
-        XCTAssertEqual(4, viewModel?.processedSingaporeData.count)
+        XCTAssertEqual(7, viewModel?.processedSingaporeData.count)
         XCTAssertTrue(insertRowsWasCalled)
         XCTAssertTrue(beginUpdatesWasCalled)
         XCTAssertTrue(endUpdatesWasCalled)
@@ -64,7 +64,7 @@ class SingaporeDataViewModelTests: XCTestCase {
     
     func testGetSingaporeDataFromnService() {
         viewModel?.getSingaporeDataFromnService()
-        XCTAssertEqual(2, viewModel?.processedSingaporeData.count)
+        XCTAssertEqual(3, viewModel?.processedSingaporeData.count)
     }
     
     func testfYearDemonstratesDecreaseInVolumeData() {
@@ -124,7 +124,14 @@ extension SingaporeDataViewModelTests: SingaporeDataViewControllerDelegate {
 
 class ServiceUtilMock: ServiceUtilProtocol {
     func getSingaporeDataFromAPI(completion: @escaping ([SingaporeDataResponse]?, String?) -> Void) {
-        let mockData = [SingaporeDataResponse(volumeOfMobileData: "0.899", quarter: "2011-Q1"), SingaporeDataResponse(volumeOfMobileData: "0.1", quarter: "2011-Q2"), SingaporeDataResponse(volumeOfMobileData: "0.7", quarter: "2018-Q1")]
+        let mockData = [
+            SingaporeDataResponse(volumeOfMobileData: "0.899", quarter: "2011-Q1"),
+            SingaporeDataResponse(volumeOfMobileData: "0.1", quarter: "2011-Q2"),
+            SingaporeDataResponse(volumeOfMobileData: "0.899", quarter: "2011-Q4"),
+            SingaporeDataResponse(volumeOfMobileData: "0.1", quarter: "2011-Q4"),
+            SingaporeDataResponse(volumeOfMobileData: "0.899", quarter: "2012-Q1"),
+            SingaporeDataResponse(volumeOfMobileData: "0.1", quarter: "2012-Q2"),
+            SingaporeDataResponse(volumeOfMobileData: "0.7", quarter: "2013-Q1")]
         
         completion(mockData, nil)
     }
